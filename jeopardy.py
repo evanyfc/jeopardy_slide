@@ -17,6 +17,7 @@ import argparse
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
+from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 
 # ---------------------------------------------------------------------------
@@ -72,8 +73,7 @@ def add_cell(slide, text, left, top, width, height,
 
     The shape is suitable for click-action hyperlinks.
     """
-    # Rectangle (MSO_SHAPE_TYPE = 1)
-    shape = slide.shapes.add_shape(1, left, top, width, height)
+    shape = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, left, top, width, height)
 
     _set_cell_bg(shape, bg_color)
     _set_border(shape, border_color)
@@ -276,9 +276,11 @@ def create_jeopardy_presentation(categories, values, output_file):
     """
     prs = Presentation()
 
-    # 16:9 widescreen
-    prs.slide_width = Inches(13.33)
-    prs.slide_height = Inches(7.5)
+    # 16:9 widescreen (13.33 × 7.5 inches)
+    SLIDE_WIDTH_IN = 13.33
+    SLIDE_HEIGHT_IN = 7.5
+    prs.slide_width = Inches(SLIDE_WIDTH_IN)
+    prs.slide_height = Inches(SLIDE_HEIGHT_IN)
 
     # 1. Board slide (shapes collected for hyperlinks later)
     board_slide, value_shapes = build_board_slide(prs, categories, values)
